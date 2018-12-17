@@ -39,8 +39,8 @@ if __name__ == '__main__':
 
     infos = getInfo(sys.argv[1:])
     
-    for uid,salary in infos.items():
-        try:
-            print(int(uid),':',format(afterSalary(int(salary)),'.2f'))
-        except:
-            print('Parameter Error')
+    try:
+        for uid,salary in infos.items():
+            print('%.2f:%.2f' % (int(uid),afterSalary(int(salary))))
+    except:
+        print('Parameter Error')
