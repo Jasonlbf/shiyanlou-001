@@ -1,15 +1,30 @@
 #!/usr/bin/env python3
 
 import sys
+import csv
 
-def getInfo(infos):
-    dic = {}
-    for i in infos:
-        lis = i.split(':')
-        dic[lis[0]] = lis[1]
+class Utils():
+    @staicmethod
+    def config(config):
+        info = {}
+        with open(config) as f:
+            for line in f:
+                line_s = line.split(' = ')
+                info[line_s[0]] = line_s[1].rstrip()
+        return info
 
-    return dic
 
+class Args():
+    @staticmethod
+    def get_path(tag):
+        if tag in ('-c','-d','-o'):
+            args = sys.argv[1:]
+            return args[args.index(tag)+1]
+        else:
+            print("please use -d -c -o parameter")
+
+
+class UserData():
 
 def afterSalary(salary):
     tax = salary * 0.08 + salary * 0.02 + salary * 0.005 + salary * 0.06 
