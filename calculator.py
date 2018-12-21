@@ -48,9 +48,9 @@ class IncomeTaxCalculater():
         jishuL = self.config['JiShuL']
         jishuH = self.config['JiShuH']
         if salary < jishuL: 
-            tax = jishuL * 0.08 + salary * 0.02 + salary * 0.005 + salary * 0.06 
+            tax = jishuL * 0.08 + jishuL * 0.02 + jishuL * 0.005 + jishuL * 0.06 
         elif salary > jishuH:
-            tax = jishuH * 0.08 + salary * 0.02 + salary * 0.005 + salary * 0.06 
+            tax = jishuH * 0.08 + jishuH * 0.02 + jishuH * 0.005 + jishuH * 0.06 
         else:
             tax = salary * 0.08 + salary * 0.02 + salary * 0.005 + salary * 0.06 
             
