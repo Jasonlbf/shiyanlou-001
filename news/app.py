@@ -5,10 +5,13 @@ import os
 import json
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from pymongo import MongoClient
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/news'
 db = SQLAlchemy(app)
+client = MongoClient('127.0.0.1',27017)
+mongodb = client.files
 
 #def reader(filename):
 #    with open('/home/shiyanlou/files/' + filename + '.json','r') as f:
@@ -31,6 +34,23 @@ class File(db.Model):
         self.content = content
         self.category = category
 
+    def add_tag(self,tag_name):
+        tags = self.tags
+        if tag_name not in tags:
+            mongodb.files.update({'file_id':self.id},{'$setOnInsert':{'tags':tags.append(tag_name)}},upsert=True)
+
+    def remove_tag(self,tag_name):
+        tags = self.tags
+        mongodb.files.update_one({'file_id':self.id},{'$set':{'tags':tags.remove(tag_name)}})
+
+    @property
+    def tags(self):
+        filetags = mongodb.files.find_one({'file_id':self.id})
+        if filetags:
+            return filetags['tags']
+        else:
+            return []
+
     def __repr__(self):
         return '<File(title=%s)>' % self.title
 
@@ -49,7 +69,7 @@ def index():
     files = File.query.all()
     file_titles = {} 
     for fil in files:
-        file_titles[fil.id] = fil.title
+        file_titles[fil.id] = [fil.title,fil.tags]
     return render_template('index.html',file_titles=file_titles)
 
 @app.route('/files/<file_id>')
