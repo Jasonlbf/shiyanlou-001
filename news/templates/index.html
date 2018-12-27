@@ -1,5 +1,7 @@
-{%for id,title in file_titles.items()%}
-<a href="http://localhost:3000/files/{{id}}">{{title[0]}}</a>
-<p>{{title[1]}}</p>
+{%for id,infos in file_infos.items()%}
+<a href="http://localhost:3000/files/{{id}}">{{infos[0]}}</a>
+{%for info in infos[1] %}
+{{info}}
+{%endfor%}
 <br>
 {%endfor%}

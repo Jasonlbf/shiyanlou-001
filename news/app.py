@@ -35,13 +35,21 @@ class File(db.Model):
         self.category = category
 
     def add_tag(self,tag_name):
-        tags = self.tags
-        if tag_name not in tags:
-            mongodb.files.update({'file_id':self.id},{'$setOnInsert':{'tags':tags.append(tag_name)}},upsert=True)
+        if self.tags:
+            tags = set(self.tags)
+            tags.add(tag_name)
+            print(tags)
+            mongodb.files.update({'file_id':self.id},{'$set':{'tags':list(tags)}})
+        else:
+            mongodb.files.insert_one({'file_id':self.id,'tags':[tag_name]})
 
     def remove_tag(self,tag_name):
-        tags = self.tags
-        mongodb.files.update_one({'file_id':self.id},{'$set':{'tags':tags.remove(tag_name)}})
+        print("remove before:",self.tags)
+        if self.tags:
+            tags = self.tags
+            tags.remove(tag_name)
+            print("remove after:",tags)
+            mongodb.files.update({'file_id':self.id},{'$set':{'tags':tags}})
 
     @property
     def tags(self):
@@ -67,10 +75,10 @@ def index():
     #show books list
 #    return hs['title'] + ' ' +  hw['title']
     files = File.query.all()
-    file_titles = {} 
+    file_infos = {} 
     for fil in files:
-        file_titles[fil.id] = [fil.title,fil.tags]
-    return render_template('index.html',file_titles=file_titles)
+        file_infos[fil.id] = [fil.title,fil.tags]
+    return render_template('index.html',file_infos=file_infos)
 
 @app.route('/files/<file_id>')
 def file(file_id):
