@@ -18,7 +18,7 @@ class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
         item['url'] = response.url
         item['name'] = response.xpath('//span[@property="v:itemreviewed"]/text()').extract()
         item['summary'] = response.xpath('//span[@property="v:summary"]/text()').extract()
-        item['score'] = response.xpath('//strong[@property="v:average"]/text()')
+        item['score'] = response.xpath('//strong[@property="v:average"]/text()').extract_first()
         return item
 
     def parse_start_url(self, response):

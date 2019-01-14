@@ -9,7 +9,7 @@ import json
 
 class DoubanMoviePipeline(object):
     def process_item(self, item, spider):
-        if float(item['score']) >= 8.0:
+        if item['score'] and float(item['score']) >= 8.0:
             self.redis.lpush('douban_movie:items',json.dumps(dict(item)))
         return item
 

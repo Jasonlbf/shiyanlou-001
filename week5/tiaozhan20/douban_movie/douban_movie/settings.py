@@ -18,7 +18,7 @@ DOWNLOAD_DELAY = 2
 COOKIES_ENABLED = False
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'douban_movie (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
