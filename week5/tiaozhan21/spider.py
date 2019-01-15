@@ -14,7 +14,7 @@ async def fetch(session, url):
             return await response.text()
 
 def parse(url, body):
-    response = HtmlResponse(url=url, body=body)
+    response = HtmlResponse(url=url, body=body, encoding='utf-8')
     for repository in response.css('li.public'):
         name = repository.css('a::text').extract_first().strip()
         update = repository.css('relative-time::attr(datetime)').extract_first()
@@ -22,7 +22,7 @@ def parse(url, body):
 
 async def task(url):
     async with aiohttp.ClientSession() as session:
-        body = fetch(session,url)
+        body = await fetch(session,url)
         parse(url,body)
 
 def main():
@@ -38,7 +38,7 @@ def main():
     loop.run_until_complete(asyncio.gather(*tasks))
     with open('/home/shiyanlou/shiyanlou-repos.csv', 'w', newline='') as f:
         writer = csv.writer(f)
-        writer = writerows(results)
+        writer.writerows(results)
 
 if __name__ == '__main__':
     main()
