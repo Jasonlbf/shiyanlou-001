@@ -15,8 +15,13 @@ class ShiyanlouGithubSpider(scrapy.Spider):
         return urls 
     
     def parse(self,response):
-        for course in response.css('div.col-9.d-inline-block'):
+       #for course in response.css('div.col-9.d-inline-block'):
+       #     yield {
+       #            'name': course.css('div.d-inline-block.mb-1 a::text').re_first('[^\w]*(\w+)[^\w]*'),
+       #            'update_time': course.css('div.f6.text-gray.mt-2 relative-time::attr(datetime)').extract_first()
+       #            }
+            
+        for course in response.xpath('//li[contains(@class, "public")]'):
             yield {
-                    'name': course.css('div.d-inline-block.mb-1 a::text').re_first('[^\w]*(\w+)[^\w]*'),
-                    'update_time': course.css('div.f6.text-gray.mt-2 relative-time::attr(datetime)').extract_first()
-                    }
+                'name': course.xpath('.//h3/a/text()').extract_first().strip(),
+                'update_time': course.xpath('.//relative-time/@datetime').extract_first()
